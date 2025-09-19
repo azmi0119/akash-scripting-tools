@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class admin-sidebar extends Component
+class AdminSidebar extends Component
 {
     /**
      * Create a new component instance.
