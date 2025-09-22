@@ -18,19 +18,23 @@
     <div class="container-fluid py-4">
         <div class="card">
             <div class="card-header pb-0 px-3">
-                <h5 class="mb-0">Add Script</h5>
+                <h5 class="mb-0">Update Script</h5>
             </div>
             <div class="card-body pt-4 p-3">
-                <form action="{{ route('admin.script.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.script.update', $script->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="domain" class="form-control-label">Domain</label>
                                 <div class="@error('domain')border border-danger rounded-3 @enderror">
                                     <select class="form-control" id="domain" name="domain">
-                                        <option value="" selected>Select Domain</option>
-                                        <option value="1">abdullahportfolio.com</option>
+                                        <option value="" disabled {{ !$script->domain ? 'selected' : '' }}>Select
+                                            Domain</option>
+                                        <option value="abdullahportfolio.com"
+                                            {{ $script->domain == '1' ? 'selected' : '' }}>
+                                            abdullahportfolio.com</option>
                                     </select>
                                     @error('domain')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
@@ -46,12 +50,18 @@
                                 <label for="cart_addon" class="form-control-label">Cart Addon</label>
                                 <div class="@error('cart_addon')border border-danger rounded-3 @enderror">
                                     <select class="form-control" id="cart_addon" name="cart_addon">
-                                        <option value="" selected>Select Cart Addon</option>
-                                        <option value="1">Home Page Redirection All Brands (False)</option>
-                                        <option value="2">iframe</option>
-                                        <option value="3">Direct UTM Link SP</option>
-                                        <option value="4">Wordpress Cookie Stuffing</option>
-                                        <option value="5">Add To Cart - Cookie Stuffing (SP)</option>
+                                        <option value="" disabled {{ !$script->cart_addon ? 'selected' : '' }}>Select
+                                            Cart Addon</option>
+                                        <option value="1" {{ $script->cart_addon == 1 ? 'selected' : '' }}>Home Page
+                                            Redirection All Brands (False)</option>
+                                        <option value="2" {{ $script->cart_addon == 2 ? 'selected' : '' }}>iframe
+                                        </option>
+                                        <option value="3" {{ $script->cart_addon == 3 ? 'selected' : '' }}>Direct UTM
+                                            Link SP</option>
+                                        <option value="4" {{ $script->cart_addon == 4 ? 'selected' : '' }}>Wordpress
+                                            Cookie Stuffing</option>
+                                        <option value="5" {{ $script->cart_addon == 5 ? 'selected' : '' }}>Add To Cart
+                                            - Cookie Stuffing (SP)</option>
                                     </select>
                                     </ @error('cart_addon') <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                     @enderror
@@ -65,8 +75,8 @@
                             <div class="form-group has-validation">
                                 <label for="user-name" class="form-control-label">Name</label>
                                 <div class="@error('user.name')border border-danger rounded-3 @enderror">
-                                    <input class="form-control" type="text" placeholder="Name" id="user-name"
-                                        name="name">
+                                    <input class="form-control" type="text" name="name"
+                                        value="{{ old('name', $script->name) }}">
                                     @error('name')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                     @enderror
@@ -78,8 +88,8 @@
                                 <label for="host" class="form-control-label">Host (without Https Only Fill Domain
                                     Name)</label>
                                 <div class="@error('host')border border-danger rounded-3 @enderror">
-                                    <input class="form-control" type="text" placeholder="www.fastrackeyewear.com"
-                                        id="host" name="host">
+                                    <input class="form-control" type="text" name="host"
+                                        value="{{ old('host', $script->host) }}">
                                     @error('host')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                     @enderror
@@ -90,8 +100,8 @@
                             <div class="form-group">
                                 <label for="tracking_time" class="form-control-label">Tracking Time</label>
                                 <div class="@error('tracking_time')border border-danger rounded-3 @enderror">
-                                    <input class="form-control" type="text" placeholder="10" id="tracking_time"
-                                        name="tracking_time">
+                                    <input class="form-control" type="text" name="tracking_time"
+                                        value="{{ old('tracking_time', $script->tracking_time) }}">
                                     @error('tracking_time')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                     @enderror
@@ -106,8 +116,8 @@
                             <div class="form-group has-validation">
                                 <label for="convert-click" class="form-control-label">Daily Limit Convert Click</label>
                                 <div class="@error('convert_click')border border-danger rounded-3 @enderror">
-                                    <input class="form-control" type="text" placeholder="100" id="convert-click"
-                                        name="convert_click">
+                                    <input class="form-control" type="text" name="convert_click"
+                                        value="{{ old('convert_click', $script->convert_click) }}">
                                     @error('convert_click')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                     @enderror
@@ -119,10 +129,15 @@
                                 <label for="device-type" class="form-control-label">Device Type</label>
                                 <div class="@error('device_type')border border-danger rounded-3 @enderror">
                                     <select class="form-control" id="device-type" name="device_type[]" multiple>
-                                        <option value="0" selected>Mobile</option>
-                                        <option value="1">Tablet</option>
-                                        <option value="2">Desktop</option>
+                                        <option value="1"
+                                            {{ in_array(1, $script->device_type ?? []) ? 'selected' : '' }}>Mobile</option>
+                                        <option value="2"
+                                            {{ in_array(2, $script->device_type ?? []) ? 'selected' : '' }}>Tablet</option>
+                                        <option value="3"
+                                            {{ in_array(3, $script->device_type ?? []) ? 'selected' : '' }}>Desktop
+                                        </option>
                                     </select>
+
                                     @error('device_type')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                     @enderror
@@ -135,13 +150,27 @@
                                 <div class="@error('social_media')border border-danger rounded-3 @enderror">
                                     <select class="form-control" id="social_media" name="social_media[]" multiple>
                                         <option value="">Select Social Media</option>
-                                        <option value="1">Facebook</option>
-                                        <option value="2">Instagram</option>
-                                        <option value="3">Pinterest</option>
-                                        <option value="4">Twitter</option>
-                                        <option value="5">LinkedIn</option>
-                                        <option value="6">Snapchat</option>
-                                        <option value="7">TikTok</option>
+                                        <option value="1"
+                                            {{ in_array(1, $script->social_media ?? []) ? 'selected' : '' }}>Facebook
+                                        </option>
+                                        <option value="2"
+                                            {{ in_array(2, $script->social_media ?? []) ? 'selected' : '' }}>Instagram
+                                        </option>
+                                        <option value="3"
+                                            {{ in_array(3, $script->social_media ?? []) ? 'selected' : '' }}>Pinterest
+                                        </option>
+                                        <option value="4"
+                                            {{ in_array(4, $script->social_media ?? []) ? 'selected' : '' }}>Twitter
+                                        </option>
+                                        <option value="5"
+                                            {{ in_array(5, $script->social_media ?? []) ? 'selected' : '' }}>LinkedIn
+                                        </option>
+                                        <option value="6"
+                                            {{ in_array(6, $script->social_media ?? []) ? 'selected' : '' }}>Snapchat
+                                        </option>
+                                        <option value="7"
+                                            {{ in_array(7, $script->social_media ?? []) ? 'selected' : '' }}>TikTok
+                                        </option>
                                     </select>
                                     @error('social_media')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
@@ -157,8 +186,8 @@
                                 <label for="tracking-one-url" class="form-control-label">Tracking Url 1 (Aff
                                     Link)</label>
                                 <div class="@error('tracking_one_url')border border-danger rounded-3 @enderror">
-                                    <input class="form-control" type="text" id="tracking-one-url"
-                                        name="tracking_one_url">
+                                    <input class="form-control" type="text" name="tracking_one_url"
+                                        value="{{ old('tracking_one_url', $script->tracking_one_url) }}">
                                     @error('tracking_one_url')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                     @enderror
@@ -173,7 +202,8 @@
                                 <label for="main_domain" class="form-control-label">Main Domain Only For
                                     Elexkerwalker</label>
                                 <div class="@error('main_domain')border border-danger rounded-3 @enderror">
-                                    <input class="form-control" type="text" id="main_domain" name="main_domain">
+                                    <input class="form-control" type="text" name="main_domain"
+                                        value="{{ old('main_domain', $script->main_domain) }}">
                                     @error('main_domain')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                     @enderror
@@ -188,9 +218,11 @@
                                 <label for="off_location" class="form-control-label">Is Off Location</label>
                                 <div class="@error('off_location')border border-danger rounded-3 @enderror">
                                     <select class="form-control" id="off_location" name="off_location">
-                                        <option value="" hidden selected>Select Off Location</option>
-                                        <option value="1">True</option>
-                                        <option value="0">False</option>
+                                        <option value="" hidden>Select Off Location</option>
+                                        <option value="1" {{ $script->off_location == 1 ? 'selected' : '' }}>True
+                                        </option>
+                                        <option value="0" {{ $script->off_location == 0 ? 'selected' : '' }}>False
+                                        </option>
                                     </select>
                                     @error('off_location')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
@@ -204,10 +236,11 @@
                                 <label for="country" class="form-control-label">Country</label>
                                 <div class="@error('country')border border-danger rounded-3 @enderror">
                                     <select class="form-control" id="country" name="country[]" multiple>
-                                        <option value="" hidden selected>Select Country</option>
                                         @foreach ($countries as $country)
-                                            <option value="{{ $country->id }}">{{ $country->iso3 }} -
-                                                {{ $country->name }}</option>
+                                            <option value="{{ $country->id }}"
+                                                {{ in_array($country->id, $script->country ?? []) ? 'selected' : '' }}>
+                                                {{ $country->iso3 }} - {{ $country->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     @error('country')
@@ -219,7 +252,7 @@
                     </div>
 
                     <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn bg-gradient-dark btn-md mt-4 mb-4">Save Script</button>
+                        <button type="submit" class="btn bg-gradient-dark btn-md mt-4 mb-4">Update Script</button>
                     </div>
                 </form>
 

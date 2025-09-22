@@ -1,1 +1,41 @@
-/vendor
+# Laravel environment file
+.env
+.env.backup
+
+# Laravel cache and logs
+/storage/*.key
+/storage/*.log
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+
+# Composer dependencies
+/vendor/
+
+# Node dependencies
+/node_modules/
+
+# NPM build output
+/public/hot
+/public/storage
+/public/vendor
+/public/mix-manifest.json
+/public/js/*.js
+/public/css/*.css
+
+# IDE or OS files
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.vscode/
+.DS_Store
+Thumbs.db
+
+# Laravel Mix
+npm-debug.log
+yarn-error.log
+
+# Other
+Homestead.yaml
+Homestead.json
