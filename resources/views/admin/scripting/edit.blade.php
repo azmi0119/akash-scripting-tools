@@ -20,6 +20,22 @@
             <div class="card-header pb-0 px-3">
                 <h5 class="mb-0">Update Script</h5>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="domain" class="form-control-label">Domain</label>
+                        <div class="@error('domain')border border-danger rounded-3 @enderror">
+                            <p>
+                                <a href="{{ asset('assets/scripts/' . $script->domain . '.js') }}" target="_blank"
+                                    rel="noopener noreferrer">
+                                    &lt;script
+                                    src="{{ asset('assets/scripts/' . $script->domain . '.js') }}"&gt;&lt;/script&gt;
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="card-body pt-4 p-3">
                 <form action="{{ route('admin.script.update', $script->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -129,12 +145,15 @@
                                 <label for="device-type" class="form-control-label">Device Type</label>
                                 <div class="@error('device_type')border border-danger rounded-3 @enderror">
                                     <select class="form-control" id="device-type" name="device_type[]" multiple>
-                                        <option value="1"
-                                            {{ in_array(1, $script->device_type ?? []) ? 'selected' : '' }}>Mobile</option>
-                                        <option value="2"
-                                            {{ in_array(2, $script->device_type ?? []) ? 'selected' : '' }}>Tablet</option>
-                                        <option value="3"
-                                            {{ in_array(3, $script->device_type ?? []) ? 'selected' : '' }}>Desktop
+                                        <option value="Mobile"
+                                            {{ in_array('Mobile', old('device_type', $script->device_type ?? [])) ? 'selected' : '' }}>
+                                            Mobile</option>
+                                        <option value="Tablet"
+                                            {{ in_array('Tablet', old('device_type', $script->device_type ?? [])) ? 'selected' : '' }}>
+                                            Tablet</option>
+                                        <option value="Desktop"
+                                            {{ in_array('Desktop', old('device_type', $script->device_type ?? [])) ? 'selected' : '' }}>
+                                            Desktop</option>
                                         </option>
                                     </select>
 
@@ -150,27 +169,21 @@
                                 <div class="@error('social_media')border border-danger rounded-3 @enderror">
                                     <select class="form-control" id="social_media" name="social_media[]" multiple>
                                         <option value="">Select Social Media</option>
-                                        <option value="1"
-                                            {{ in_array(1, $script->social_media ?? []) ? 'selected' : '' }}>Facebook
-                                        </option>
-                                        <option value="2"
-                                            {{ in_array(2, $script->social_media ?? []) ? 'selected' : '' }}>Instagram
-                                        </option>
-                                        <option value="3"
-                                            {{ in_array(3, $script->social_media ?? []) ? 'selected' : '' }}>Pinterest
-                                        </option>
-                                        <option value="4"
-                                            {{ in_array(4, $script->social_media ?? []) ? 'selected' : '' }}>Twitter
-                                        </option>
-                                        <option value="5"
-                                            {{ in_array(5, $script->social_media ?? []) ? 'selected' : '' }}>LinkedIn
-                                        </option>
-                                        <option value="6"
-                                            {{ in_array(6, $script->social_media ?? []) ? 'selected' : '' }}>Snapchat
-                                        </option>
-                                        <option value="7"
-                                            {{ in_array(7, $script->social_media ?? []) ? 'selected' : '' }}>TikTok
-                                        </option>
+                                        <option value="Facebook"
+                                            {{ in_array('Facebook', $script->social_media ?? []) ? 'selected' : '' }}>
+                                            Facebook</option>
+                                        <option value="Instagram"
+                                            {{ in_array('Instagram', $script->social_media ?? []) ? 'selected' : '' }}>
+                                            Instagram</option>
+                                        <option value="Pinterest"
+                                            {{ in_array('Pinterest', $script->social_media ?? []) ? 'selected' : '' }}>
+                                            Pinterest</option>
+                                        <option value="Twitter"
+                                            {{ in_array('Twitter', $script->social_media ?? []) ? 'selected' : '' }}>
+                                            Twitter</option>
+                                        <option value="LinkedIn"
+                                            {{ in_array('LinkedIn', $script->social_media ?? []) ? 'selected' : '' }}>
+                                            LinkedIn</option>
                                     </select>
                                     @error('social_media')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
@@ -238,7 +251,7 @@
                                     <select class="form-control" id="country" name="country[]" multiple>
                                         @foreach ($countries as $country)
                                             <option value="{{ $country->id }}"
-                                                {{ in_array($country->id, $script->country ?? []) ? 'selected' : '' }}>
+                                                {{ in_array((string) $country->id, $script->country ?? []) ? 'selected' : '' }}>
                                                 {{ $country->iso3 }} - {{ $country->name }}
                                             </option>
                                         @endforeach

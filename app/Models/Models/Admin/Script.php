@@ -10,9 +10,9 @@ class Script extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
         'domain',
         'cart_addon',
+        'name',
         'host',
         'tracking_time',
         'convert_click',
@@ -21,12 +21,15 @@ class Script extends Model
         'tracking_one_url',
         'main_domain',
         'off_location',
-        'country'
+        'country',
+        'generated_script',
+        'status'
     ];
 
-    protected $casts = [
-        'device_type'   => 'array',
-        'social_media'  => 'array',
-        'country'       => 'array',
-    ];
+    // protected $casts = [
+    //     'device_type' => 'array',
+    //     'social_media' => 'array',
+    //     'country' => 'array',
+    //     'off_location' => 'boolean'
+    // ];
 }
