@@ -137,6 +137,9 @@ class ScriptingController extends Controller
 
     private function generateRedirectionScript($config)
     {
+
+
+
         // Clean the host URL - remove protocol and www
         $cleanHost = preg_replace('/^https?:\/\/(www\.)?/', '', $config['host']);
         $cleanHost = strtolower(trim($cleanHost));
@@ -150,6 +153,7 @@ class ScriptingController extends Controller
         $targetCountries = json_encode($config['target_countries']);
         $offLocation = $config['off_location'] ? 'true' : 'false';
         $targetWebsites = json_encode([$cleanHost]);
+        $redirectToLink = "\"https://{$cleanHost}\"";
 
         return "// IntelliRedirect Pro - Advanced Redirection System
         (function() {
@@ -160,8 +164,8 @@ class ScriptingController extends Controller
                     console.log('IntelliRedirect: Initializing redirection system');
                     
                     var targetWebsites = {$targetWebsites};
-                    var redirectTo = \"{$config['tracking_url']}\";
-                    var trackingTime = {$config['tracking_time']};
+                    var redirectTo = {$redirectToLink};
+                    var trackingTime = 0';
 
                     var excludeSocialMedia = true;
                     var socialMediaSites = {$socialMediaSites};
@@ -296,7 +300,6 @@ class ScriptingController extends Controller
             }
         })();";
     }
-
 
     /**
      * Display the specified resource.
