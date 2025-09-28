@@ -17,9 +17,9 @@ class UserController extends Controller
 
     function __construct()
     {
-        $this->middleware('role_or_permission:SuperAdmin|User access|User create|User edit|User delete', ['only' => ['index','show']]);
-        $this->middleware('role_or_permission:SuperAdmin|User create', ['only' => ['create','store']]);
-        $this->middleware('role_or_permission:SuperAdmin|User edit', ['only' => ['edit','update']]);
+        $this->middleware('role_or_permission:SuperAdmin|User access|User create|User edit|User delete', ['only' => ['index', 'show']]);
+        $this->middleware('role_or_permission:SuperAdmin|User create', ['only' => ['create', 'store']]);
+        $this->middleware('role_or_permission:SuperAdmin|User edit', ['only' => ['edit', 'update']]);
         $this->middleware('role_or_permission:SuperAdmin|User delete', ['only' => ['destroy']]);
     }
 
@@ -33,8 +33,8 @@ class UserController extends Controller
         $users = User::all();
 
         foreach ($users as $user) {
-            foreach ($user->roles as $role){
-                if ($role->name == 'SuperAdmin' ) {
+            foreach ($user->roles as $role) {
+                if ($role->name == 'SuperAdmin') {
                     $adminId = $user->id;
                 }
             }
@@ -67,13 +67,13 @@ class UserController extends Controller
         $inputs = $request->all();
         $user = User::create($inputs);
 
-        if($inputs['role'] != 0 ) {
+        if ($inputs['role'] != 0) {
             $user->syncRoles($request->role);
         } else {
             $user->assignRole('User');
         }
 
-        $flasher->addSuccess('User Created', 'Dash UI');
+        $flasher->addSuccess('User Created', 'Dashboard');
         return redirect(route('admin.users.index'));
     }
 
@@ -99,9 +99,9 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         // If User Role is SuperAdmin it will be Redirected;
-        foreach ($user->roles as $role){
+        foreach ($user->roles as $role) {
             if ($role->name == 'SuperAdmin' || auth()->user()->hasRole($role->name)) {
-                $flasher->addError('Not Allowed', 'Dash UI');
+                $flasher->addError('Not Allowed', 'Dashboard');
                 return redirect(route('admin.users.index'));
             }
         }
@@ -124,7 +124,7 @@ class UserController extends Controller
         $userRole = $request->role;
         $inputs = $request->all();
 
-        if($user->isDirty('username')) {
+        if ($user->isDirty('username')) {
             $user->update([
                 'username' => $request->username
             ]);
@@ -133,7 +133,7 @@ class UserController extends Controller
         $user->syncRoles($userRole);
 
         $user->update($inputs);
-        $flasher->addSuccess('User "'.$user->name.'" updated.', 'Dash UI');
+        $flasher->addSuccess('User "' . $user->name . '" updated.', 'Dashboard');
         return redirect(route('admin.users.index'));
     }
 
@@ -146,7 +146,7 @@ class UserController extends Controller
         ]);
         $user->password = $request->password;
 
-        if($user->isDirty('password')) {
+        if ($user->isDirty('password')) {
             $hashPass = bcrypt($request->password);
             $user->update([
                 'password' => $hashPass
@@ -162,7 +162,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         $request->validate([
-           'phone'      => 'required|numeric|min:11',
+            'phone'      => 'required|numeric|min:11',
         ]);
 
         $inputs = $request->all();
@@ -177,7 +177,7 @@ class UserController extends Controller
             ]);
         }
 
-        $flasher->addSuccess('Profile Updated', 'Dash UI');
+        $flasher->addSuccess('Profile Updated', 'Dashboard');
         return back();
     }
 
@@ -190,15 +190,15 @@ class UserController extends Controller
     public function destroy(FlasherInterface $flasher, User $user)
     {
         // If User Role is SuperAdmin it will be Redirected;
-        foreach ($user->roles as $role){
+        foreach ($user->roles as $role) {
             if ($role->name == 'SuperAdmin' || auth()->user()->hasRole($role->name)) {
-                $flasher->addError('Not Allowed', 'Dash UI');
+                $flasher->addError('Not Allowed', 'Dashboard');
                 return redirect(route('admin.users.index'));
             }
         }
 
         $user->delete();
-        $flasher->addInfo('User Deleted Successfully', 'Dash UI');
+        $flasher->addInfo('User Deleted Successfully', 'Dashboard');
         return redirect()->back();
     }
 }

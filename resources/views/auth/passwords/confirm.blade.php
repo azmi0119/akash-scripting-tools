@@ -21,22 +21,26 @@
 
                                     <label class="text-danger text-gradient">Password</label>
                                     <div class="mb-3">
-                                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                        <input id="password" type="password"
+                                            class="form-control @error('password') is-invalid @enderror" name="password"
+                                            required autocomplete="new-password">
                                         @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
                                         @enderror
                                     </div>
                                     <div class="text-center">
-                                        <button type="submit" class="btn bg-gradient-danger w-100 my-4 mb-2">SUBMIT</button>
+                                        <button type="submit"
+                                            class="btn bg-gradient-danger w-100 my-4 mb-2">SUBMIT</button>
                                     </div>
                                 </form>
                             </div>
                             <div class="card-footer text-center pt-0 px-lg-2 px-1">
                                 <p class="mb-4 text-sm mx-auto">
                                     @if (Route::has('password.request'))
-                                        <a class="btn btn-link text-danger text-gradient" href="{{ route('password.request') }}">
+                                        <a class="btn btn-link text-danger text-gradient"
+                                            href="{{ route('password.request') }}">
                                             {{ __('Forgot Your Password?') }}
                                         </a>
                                     @endif
@@ -44,14 +48,16 @@
                             </div>
                         </div>
                         <p class="text-secondary text-center pt-5">
-                            Copyright © <script>
+                            Copyright ©
+                            <script>
                                 document.write(new Date().getFullYear())
-                            </script> Dash UI - Laravel Starter
+                            </script> Dashboard - Laravel Starter
                         </p>
                     </div>
                     <div class="col-md-6">
                         <div class="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
-                            <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n9" style="background-image:url('{{ asset('assets/img/curved-images/curved45.jpg') }}')"></div>
+                            <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n9"
+                                style="background-image:url('{{ asset('assets/img/curved-images/curved45.jpg') }}')"></div>
                         </div>
                     </div>
                 </div>

@@ -76,14 +76,14 @@ class ProfileController extends Controller
         $user->username = $request->usermname;
         $inputs = $request->all();
 
-        if($user->isDirty('username')) {
+        if ($user->isDirty('username')) {
             $user->update([
                 'username' => $request->username
             ]);
         }
 
         $user->update($inputs);
-        $flasher->addSuccess('User "'.$user->name.'" updated.', 'Dash UI');
+        $flasher->addSuccess('User "' . $user->name . '" updated.', 'Dashboard');
         return redirect()->back();
     }
 
@@ -96,12 +96,12 @@ class ProfileController extends Controller
         ]);
         $user->password = $request->password;
 
-        if($user->isDirty('password')) {
+        if ($user->isDirty('password')) {
             $hashPass = bcrypt($request->password);
             $user->update([
                 'password' => $hashPass
             ]);
-            $flasher->addSuccess('Password Updated', 'Dash UI');
+            $flasher->addSuccess('Password Updated', 'Dashboard');
         }
         return redirect()->back();
     }
@@ -126,7 +126,7 @@ class ProfileController extends Controller
             ]);
         }
 
-        $flasher->addSuccess('Profile Updated', 'Dash UI');
+        $flasher->addSuccess('Profile Updated', 'Dashboard');
         return back();
     }
 

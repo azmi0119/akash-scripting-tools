@@ -17,14 +17,14 @@ As, User, Roles, Permission Management system is a very basic requirements for e
 - Suitable For all types of Projects.
 - Open Source
 
-## ⭐ For Whom is Dash UI ?
+## ⭐ For Whom is Dashboard ?
 
 - For Developers, who want to create their new projects implementing these features. This will save a lots of your development time.
 - For Learners, who want to learn about in Depth Laravel and dig deeper into Eloquent Relationships.
 
-## ⭐ Why Dash UI ?
+## ⭐ Why Dashboard ?
 
-Dash UI is combined with Laravel 9 + Bootstrap 5. This also includes many inbuild components which are required for building a complete Admin Panel, like Charts, Graphs, Cards, Layouts, Tables. Dash UI is completely responsive, so you can view it on any device.
+DashUIDashboard is combined with Laravel 9 + Bootstrap 5. This also includes many inbuild components which are required for building a complete Admin Panel, like Charts, Graphs, Cards, Layouts, Tables. Dashboard is completely responsive, so you can view it on any device.
 
 > Open Source
 

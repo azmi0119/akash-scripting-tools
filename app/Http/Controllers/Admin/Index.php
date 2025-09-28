@@ -9,13 +9,15 @@ use Illuminate\Support\Facades\Auth;
 
 class Index extends Controller
 {
-    function __construct() {
+    function __construct()
+    {
         $this->middleware('auth');
         $this->middleware('role_or_permission:SuperAdmin|AdminPanel access', ['only' => 'index']);
     }
 
-    public function index(FlasherInterface $flasher) {
-        $flasher->addSuccess('Welcome '. auth()->user()->name . '!', 'Dash UI' );
+    public function index(FlasherInterface $flasher)
+    {
+        $flasher->addSuccess('Welcome ' . auth()->user()->name . '!', 'Dashboard');
         return view('admin.index');
     }
 }

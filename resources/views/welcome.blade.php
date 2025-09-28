@@ -127,7 +127,7 @@
             <h1>Welcome to Scripting Tools</h1>
             <p>Boost your productivity with our powerful scripting solutions. Automate tasks, improve efficiency, and
                 save valuable time with tools crafted for developers and businesses.</p>
-            <a href="#" class="btn">Get Started</a>
+            <a href="{{ url('/login') }}" class="btn">Get Started</a>
         </div>
         <div class="hero-image">
             <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1000" alt="Colorful background">

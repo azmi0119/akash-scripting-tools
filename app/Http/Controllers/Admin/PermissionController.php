@@ -12,9 +12,9 @@ class PermissionController extends Controller
 {
     function __construct()
     {
-        $this->middleware('role_or_permission:SuperAdmin|Permission access|Permission create|Permission edit|Permission delete', ['only' => ['index','show']]);
-        $this->middleware('role_or_permission:SuperAdmin|Permission create', ['only' => ['create','store']]);
-        $this->middleware('role_or_permission:SuperAdmin|Permission edit', ['only' => ['edit','update']]);
+        $this->middleware('role_or_permission:SuperAdmin|Permission access|Permission create|Permission edit|Permission delete', ['only' => ['index', 'show']]);
+        $this->middleware('role_or_permission:SuperAdmin|Permission create', ['only' => ['create', 'store']]);
+        $this->middleware('role_or_permission:SuperAdmin|Permission edit', ['only' => ['edit', 'update']]);
         $this->middleware('role_or_permission:SuperAdmin|Permission delete', ['only' => ['destroy']]);
     }
 
@@ -53,7 +53,7 @@ class PermissionController extends Controller
         $input['name'] = Str::ucfirst($request->name);
 
         Permission::create($input);
-        $flasher->addSuccess('Permission "'.$request->name. '" Added', 'Dash UI');
+        $flasher->addSuccess('Permission "' . $request->name . '" Added', 'Dashboard');
         return redirect(route('admin.permissions.index'));
     }
 
@@ -96,7 +96,7 @@ class PermissionController extends Controller
         $input['name'] = Str::ucfirst($request->name);
 
         Permission::findOrFail($id)->update($input);
-        $flasher->addInfo('Permission "'.$request->name. '" Updated', 'Dash UI');
+        $flasher->addInfo('Permission "' . $request->name . '" Updated', 'Dashboard');
         return redirect(route('admin.permissions.index'));
     }
 
@@ -109,7 +109,7 @@ class PermissionController extends Controller
     public function destroy(Permission $permission, FlasherInterface $flasher)
     {
         $permission->delete();
-        $flasher->addWarning('Permission Deleted', 'Dash UI');
+        $flasher->addWarning('Permission Deleted', 'Dashboard');
         return redirect(route('admin.permissions.index'));
     }
 }

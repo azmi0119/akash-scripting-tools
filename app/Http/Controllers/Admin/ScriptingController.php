@@ -384,6 +384,19 @@ class ScriptingController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $script = Script::findOrFail($id);
+
+        // Build the script file path
+        $scriptPath = public_path('assets/scripts/' . $script->domain . '.js');
+
+        // Delete the file if it exists
+        if (file_exists($scriptPath)) {
+            unlink($scriptPath);
+        }
+
+        // Delete the DB record
+        $script->delete();
+
+        return redirect()->route('admin.script.index')->with('success', 'Script deleted successfully!');
     }
 }

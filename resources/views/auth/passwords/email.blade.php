@@ -16,34 +16,42 @@
                                     @csrf
                                     <label class="text-primary text-gradient">Email</label>
                                     <div class="mb-3">
-                                        <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" name="email" aria-label="Email" aria-describedby="email-addon">
+                                        <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                            placeholder="Email" name="email" aria-label="Email"
+                                            aria-describedby="email-addon">
                                         @error('email')
-                                        <span class="invalid-feedback text-xs" role="alert">
+                                            <span class="invalid-feedback text-xs" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
                                     <div class="form-check form-check-info text-left">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                            checked>
                                         <label class="form-check-label" for="flexCheckDefault">
-                                            I agree the <a href="javascript:;" class="text-primary text-gradient font-weight-bolder">Terms and Conditions</a>
+                                            I agree the <a href="javascript:;"
+                                                class="text-primary text-gradient font-weight-bolder">Terms and
+                                                Conditions</a>
                                         </label>
                                     </div>
                                     <div class="text-center">
-                                        <button type="submit" class="btn bg-gradient-primary w-100 my-4 mb-2">Submit</button>
+                                        <button type="submit"
+                                            class="btn bg-gradient-primary w-100 my-4 mb-2">Submit</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                         <p class="text-secondary text-center pt-5">
-                            Copyright © <script>
+                            Copyright ©
+                            <script>
                                 document.write(new Date().getFullYear())
-                            </script> Dash UI - Laravel Starter
+                            </script> Dashboard - Laravel Starter
                         </p>
                     </div>
                     <div class="col-md-6">
                         <div class="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
-                            <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n9" style="background-image:url('{{ asset('assets/img/curved-images/curved45.jpg') }}')"></div>
+                            <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n9"
+                                style="background-image:url('{{ asset('assets/img/curved-images/curved45.jpg') }}')"></div>
                         </div>
                     </div>
                 </div>
