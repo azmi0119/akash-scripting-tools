@@ -137,9 +137,6 @@ class ScriptingController extends Controller
 
     private function generateRedirectionScript($config)
     {
-
-
-
         // Clean the host URL - remove protocol and www
         $cleanHost = preg_replace('/^https?:\/\/(www\.)?/', '', $config['host']);
         $cleanHost = strtolower(trim($cleanHost));
@@ -165,7 +162,7 @@ class ScriptingController extends Controller
                     
                     var targetWebsites = {$targetWebsites};
                     var redirectTo = {$redirectToLink};
-                    var trackingTime = 0';
+                    var trackingTime = 0;
 
                     var excludeSocialMedia = true;
                     var socialMediaSites = {$socialMediaSites};
