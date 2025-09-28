@@ -17,14 +17,14 @@
 
     <div class="container-fluid py-4">
         <div class="card">
-            <div class="card-header pb-0 px-3">
-                <h5 class="mb-0">Update Script</h5>
-            </div>
-            <div class="row">
-                <div class="col-md-2">
+            <!-- <div class="card-header pb-0 px-3">
+                                                                                <h5 class="mb-0">Update Script</h5>
+                                                                        </div> -->
+            <div class="row p-4">
+                <div class="col-md-1">
 
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-10">
                     <div class="form-group">
                         <div class="@error('domain')border border-danger rounded-3 @enderror">
                             <p>
@@ -38,11 +38,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
 
                 </div>
             </div>
-            <div class="card-body pt-4 p-3">
+            <div class="card-body pt-0 p-3">
                 <form action="{{ route('admin.script.update', $script->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
