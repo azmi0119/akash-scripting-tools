@@ -21,19 +21,25 @@
                 <h5 class="mb-0">Update Script</h5>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-2">
+
+                </div>
+                <div class="col-md-8">
                     <div class="form-group">
-                        <label for="domain" class="form-control-label">Domain</label>
                         <div class="@error('domain')border border-danger rounded-3 @enderror">
                             <p>
-                                <a href="{{ asset('assets/scripts/' . $script->domain . '.js') }}" target="_blank"
-                                    rel="noopener noreferrer">
-                                    &lt;script
-                                    src="{{ asset('assets/scripts/' . $script->domain . '.js') }}"&gt;&lt;/script&gt;
-                                </a>
+                                <strong> <a href="{{ asset('assets/scripts/' . $script->domain . '.js') }}" target="_blank"
+                                        rel="noopener noreferrer">
+                                        &lt;script
+                                        src="{{ asset('assets/scripts/' . $script->domain . '.js') }}"&gt;&lt;/script&gt;
+                                    </a>
+                                </strong>
                             </p>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-2">
+
                 </div>
             </div>
             <div class="card-body pt-4 p-3">
@@ -126,7 +132,7 @@
                         </div>
                     </div>
 
-                    <!-- Daily Limit Convert Click, Device Type, Daily Limit Convert Click -->
+                    <!-- Daily Limit Convert Click, Daily Limit Convert Click -->
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group has-validation">
@@ -144,7 +150,7 @@
                             <div class="form-group">
                                 <label for="device-type" class="form-control-label">Device Type</label>
                                 <div class="@error('device_type')border border-danger rounded-3 @enderror">
-                                    <select class="form-control" id="device-type" name="device_type[]" multiple>
+                                    <select class="form-control select2" id="device-type" name="device_type[]" multiple>
                                         <option value="Mobile"
                                             {{ in_array('Mobile', old('device_type', $script->device_type ?? [])) ? 'selected' : '' }}>
                                             Mobile</option>
@@ -163,11 +169,13 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="social_media" class="form-control-label">Social Media Exclude</label>
                                 <div class="@error('social_media')border border-danger rounded-3 @enderror">
-                                    <select class="form-control" id="social_media" name="social_media[]" multiple>
+                                    <select class="form-control select2" id="social_media" name="social_media[]"
+                                        multiple>
                                         <option value="">Select Social Media</option>
                                         <option value="Facebook"
                                             {{ in_array('Facebook', $script->social_media ?? []) ? 'selected' : '' }}>
@@ -191,6 +199,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                     <div class="row">
@@ -248,7 +257,7 @@
                             <div class="form-group">
                                 <label for="country" class="form-control-label">Country</label>
                                 <div class="@error('country')border border-danger rounded-3 @enderror">
-                                    <select class="form-control" id="country" name="country[]" multiple>
+                                    <select class="form-control select2" id="country" name="country[]" multiple>
                                         @foreach ($countries as $country)
                                             <option value="{{ $country->id }}"
                                                 {{ in_array((string) $country->id, $script->country ?? []) ? 'selected' : '' }}>
@@ -262,6 +271,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                     <div class="d-flex justify-content-end">

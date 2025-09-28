@@ -122,11 +122,12 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="device-type" class="form-control-label">Device Type</label>
                                 <div class="@error('device_type')border border-danger rounded-3 @enderror">
-                                    <select class="form-control" id="device-type" name="device_type[]" multiple>
+                                    <select class="form-control select2" id="device-type" name="device_type[]" multiple>
                                         <option value="Mobile"
                                             {{ in_array('Mobile', old('device_type', [])) ? 'selected' : '' }}>Mobile
                                         </option>
@@ -137,18 +138,21 @@
                                             {{ in_array('Desktop', old('device_type', [])) ? 'selected' : '' }}>Desktop
                                         </option>
                                     </select>
+
                                     @error('device_type')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
                         </div>
+
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="social_media" class="form-control-label">Social Media Exclude</label>
                                 <div class="@error('social_media')border border-danger rounded-3 @enderror">
-                                    <select class="form-control" id="social_media" name="social_media[]" multiple>
-                                        <option value="">Select Social Media</option>
+                                    <select class="form-control select2" id="social_media" name="social_media[]"
+                                        multiple>
                                         <option value="Facebook"
                                             {{ in_array('Facebook', old('social_media', [])) ? 'selected' : '' }}>Facebook
                                         </option>
@@ -225,13 +229,12 @@
                             <div class="form-group">
                                 <label for="country" class="form-control-label">Country</label>
                                 <div class="@error('country')border border-danger rounded-3 @enderror">
-                                    <select class="form-control" id="country" name="country[]" multiple>
-                                        <option value="" hidden selected>Select Country</option>
+                                    <select class="form-control select2" id="country" name="country[]" multiple>
                                         @foreach ($countries as $country)
                                             <option value="{{ $country->id }}"
                                                 {{ in_array($country->id, old('country', [])) ? 'selected' : '' }}>
-                                                {{ $country->iso3 }} -
-                                                {{ $country->name }}</option>
+                                                {{ $country->iso3 }} - {{ $country->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     @error('country')
